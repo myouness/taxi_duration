@@ -13,9 +13,12 @@ def read_data_base():
     numeric_variables = ['vendor_id', 'passenger_count', 'pickup_longitude', 'pickup_latitude', 'dropoff_longitude',
                          'dropoff_latitude', 'store_and_fwd_flag' ]
 
+    train["store_and_fwd_flag"] = train["store_and_fwd_flag"].map({"N":0, "Y":1})
+    test["store_and_fwd_flag"] = test["store_and_fwd_flag"].map({"N":0, "Y":1})
+
     target = "trip_duration"
 
-    return train[numeric_variables], train[target], test[numeric_variables]
+    return train[numeric_variables], test[numeric_variables], train["id"], test["id"], train[target]
 
 #Create some distance related columns
 def compute_distance(x):
@@ -64,6 +67,10 @@ def read_data_add_features():
     numeric_variables = ['vendor_id', 'passenger_count', 'pickup_longitude', 'pickup_latitude', 'dropoff_longitude',
                          'dropoff_latitude', 'store_and_fwd_flag' ]
 
+    train["store_and_fwd_flag"] = train["store_and_fwd_flag"].map({"N":0, "Y":1})
+    test["store_and_fwd_flag"] = test["store_and_fwd_flag"].map({"N":0, "Y":1})
+
+
     target = "trip_duration"
 
     train["day_of_week"] = train.pickup_datetime.dt.dayofweek
@@ -86,6 +93,7 @@ def read_data_add_features():
 
     add_features = ["day_of_week", "month", "day_of_month", "day_of_year", "hour", "minute", "distance", "bearing"]
 
-    return train[numeric_variables+add_features], train[target], test[numeric_variables+add_features]
+    return train[numeric_variables+add_features], test[numeric_variables+add_features], train["id"],\
+           test["id"], train[target]
 
 
